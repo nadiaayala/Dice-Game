@@ -19,21 +19,25 @@ const playerOne = document.getElementById('name-0');
 const playerTwo = document.getElementById('name-1');
 const playerOneScore = document.getElementsByClassName('player-score')[0];
 const playerTwoScore = document.getElementsByClassName('player-score')[1];
+const divPlayerOne = document.getElementsByClassName('player-0-panel')[0];
+const divPlayerTwo = document.getElementsByClassName('player-1-panel')[0];
 var firstPlayer,secondPlayer;
 var firstPlayerScore = 0;
 var secondPlayerScore = 0;
-var firstPlayerIsplaying, secondPlayerIsPlaying;
+var firstPlayerIsPlaying, secondPlayerIsPlaying;
 
 let currentSumValue = 0;
 
 
 newGameBtn.addEventListener('click', function(){
-    getPlayersNames();
+    firstPlayer = "";
+    secondPlayer = "";
+    askPlayersNames();
     updateNames();
     resetScores();
     resetSumPlayerOne();
     resetSumPlayerTwo();
-    firstPlayerIsplaying = true;
+    firstPlayerIsPlaying = true;
 });
 
 rollDiceBtn.addEventListener('click', function(){
@@ -45,9 +49,16 @@ holdBtn.addEventListener('click', function(){
 });
 
 //Starting a new game
+function askPlayersNames(){
+    while(firstPlayer == null || firstPlayer == ''){
+        firstPlayer = prompt("First player\'s name: ");
+    }
+    while(secondPlayer == null || secondPlayer == ''){
+        secondPlayer = prompt("Second player\'s name: ");
+    }
+}
 function getPlayersNames(){
-    firstPlayer = prompt("First player\'s name: ");
-    secondPlayer = prompt("Second player\'s name: ");
+    return [firstPlayer,secondPlayer];
 }
 function updateNames(){
     playerOne.textContent = firstPlayer;
@@ -64,7 +75,7 @@ function resetSumPlayerTwo(){
     currentSumLabelTwo.textContent = '0';
 }
 function resetSumCurrentPlayer(){
-    if(firstPlayerIsplaying){
+    if(firstPlayerIsPlaying){
         currentSumLabelOne.textContent = '0';
     }
     else if (secondPlayerIsPlaying){
@@ -80,50 +91,61 @@ function rollDice(){
     diceImage.src = `dice-${num}.png`;
     if (num !== 1){
         increaseSum(num);
-        updateSumLabel();
+        updateSumLabel(num);
     }
     else{
+        console.log('Rolled a 1! :(');
         currentSumValue = 0;
         resetSumCurrentPlayer();
         switchTurn();
     }
+    
 }
 function increaseSum(val){
     if (val !== 1){
         currentSumValue += val;
     }
-}
+};
 function updateSumLabel(value){
-    if (firstPlayerIsplaying){
+    if (firstPlayerIsPlaying){
         currentSumLabelOne.textContent = currentSumValue;
-        console.log(" first player");
+        console.log(`${firstPlayer} rolled a ${value}`);
     }
     else if (secondPlayerIsPlaying){
         currentSumLabelTwo.textContent = currentSumValue;
+        console.log(`${secondPlayer}  rolled a ${value}`);
     }
-}
+};
 
 function switchTurn(){
-    if(firstPlayerIsplaying){
-        firstPlayerIsplaying = false;
+    if(firstPlayerIsPlaying){
+        firstPlayerIsPlaying = false;
         secondPlayerIsPlaying = true;
     }
     else if (secondPlayerIsPlaying){
-        firstPlayerIsplaying = true;
+        firstPlayerIsPlaying = true;
         secondPlayerIsPlaying = false;
     }
-}
+    changeBackground();
+};
+
 function hold(){
-    if(firstPlayerIsplaying){
-        let newScore = firstPlayerScore + currentSumValue;
+    if(firstPlayerIsPlaying && secondPlayerIsPlaying !== true){
+        let newScore = firstPlayerScore += currentSumValue;
+        console.log(newScore);
         playerOneScore.textContent = newScore;
     }
-    else if(secondPlayerIsPlaying){
-        let newScore = secondPlayerScore + currentSumValue;
+    else if(secondPlayerIsPlaying && firstPlayerIsPlaying !== true ){
+        let newScore = secondPlayerScore += currentSumValue;
         playerTwoScore.textContent = newScore;
     }
     resetSumCurrentPlayer();
     resetSumVariable();
     switchTurn();
+    
+}
+function changeBackground(){
+    divPlayerOne.classList.toggle('active');
+    divPlayerTwo.classList.toggle('active');
 }
 
