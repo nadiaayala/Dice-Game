@@ -19,6 +19,7 @@ const rollDiceBtn = document.getElementsByClassName('btn-roll')[0];
 const holdBtn = document.getElementsByClassName('btn-hold')[0];
 const newGameBtn = document.getElementsByClassName('btn-new')[0];
 let diceImage = document.querySelector(".dice");
+let winningScore;
 let player0 = "";
 let player1 = "";
 let scores = [0,0]
@@ -87,7 +88,7 @@ function rollDice() {
         if (lastDice === 6 && num === 6) {
             resetScore();
             resetSum();
-            setTimeout(switchTurn, 1000);
+            setTimeout(switchTurn, 500);
             lastDice = 0;
         }
         else {
@@ -119,9 +120,11 @@ function hold(){
 }
 function updateScore(){
     scores[activePlayer] = scores[activePlayer] += currentSumValue;
-    document.querySelector('#score-'+activePlayer).textContent = scores[activePlayer];
     resetSum();
-    if(scores[activePlayer] >= 20){
+    updateScoreField();
+    //Checking if the user won the game
+    winningScore = document.querySelector(".final-score").value;
+    if(scores[activePlayer] >= winningScore){
         checkWinner();
     }
     else{
@@ -156,9 +159,12 @@ function updateDice(val){
     diceImage.src = `dice-${val}.png`;
 }
 
+function updateScoreField(){
+    document.querySelector('#score-'+activePlayer).textContent = scores[activePlayer];
+}
+
 //Chaging the background color
 function changeBackground(){
-    console.log("bg should be gray");
     document.querySelector('.player-0-panel').classList.toggle('active');
     document.querySelector('.player-1-panel').classList.toggle('active');
 }
