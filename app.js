@@ -17,9 +17,27 @@ let player0, player1;
 let scores = [0,0]
 let currentSumValue = 0;
 let activePlayer = 0;
+let gamePlaying = false;
 
 //Starting a new game
 newGameBtn.addEventListener('click', function(){
+    init();
+});
+//Rolling the dice
+rollDiceBtn.addEventListener('click', function(){
+    if(gamePlaying){
+        rollDice();
+    }
+});
+//Hold button pressed
+holdBtn.addEventListener('click', function(){
+    if(gamePlaying){
+        hold();
+    }
+});
+
+function init(){
+    gamePlaying = true;
     player0 = "";
     player1 = "";
     askPlayersNames();
@@ -27,17 +45,7 @@ newGameBtn.addEventListener('click', function(){
     resetScores();
     resetSum();
     firstPlayerIsPlaying = true;
-});
-//Rolling the dice
-rollDiceBtn.addEventListener('click', function(){
-    rollDice();
-});
-//Hold button pressed
-holdBtn.addEventListener('click', function(){
-    hold();
-});
-
-
+}
 function askPlayersNames(){
     while(player0 == null || player0 == ''){
         player0 = prompt("First player\'s name: ");
@@ -92,17 +100,18 @@ function updateScore(){
     scores[activePlayer] = scores[activePlayer] += currentSumValue;
     document.querySelector('#score-'+activePlayer).textContent = scores[activePlayer];
     resetSum();
-    if(scores[activePlayer] <= 10){
-        switchTurn();
+    if(scores[activePlayer] >= 20){
+        checkWinner();
     }
     else{
-        checkWinner();
+        switchTurn();
     }
 }
 function checkWinner(){
         document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
         document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
         document.querySelector('#name-' + activePlayer).textContent = "WINNER!";
+        gamePlaying = false;
 }
 function changeBackground(){
     document.querySelector('.player-0-panel').classList.toggle('active');
