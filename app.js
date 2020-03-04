@@ -12,13 +12,14 @@ GAME RULES:
 const rollDiceBtn = document.getElementsByClassName('btn-roll')[0];
 const holdBtn = document.getElementsByClassName('btn-hold')[0];
 const newGameBtn = document.getElementsByClassName('btn-new')[0];
-const diceImage = document.getElementsByClassName('dice')[0];
+let diceImage = document.querySelector(".dice");
 let player0, player1;
 let scores = [0,0]
 let currentSumValue = 0;
 let activePlayer = 0;
 let gamePlaying = false;
 
+diceImage.style.display = "none";
 //Starting a new game
 newGameBtn.addEventListener('click', function(){
     init();
@@ -68,6 +69,7 @@ function resetSum(){
 }
 function rollDice(){
     let num = Math.floor(Math.random()  *  6) + 1 ;
+    diceImage.style.display = "block";
     diceImage.src = `dice-${num}.png`;
     if (num !== 1){
         increaseSum(num);
@@ -112,6 +114,7 @@ function checkWinner(){
         document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
         document.querySelector('#name-' + activePlayer).textContent = "WINNER!";
         gamePlaying = false;
+        document.querySelector(".dice").style.display = "none";
 }
 function changeBackground(){
     document.querySelector('.player-0-panel').classList.toggle('active');
