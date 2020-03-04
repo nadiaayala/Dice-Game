@@ -49,7 +49,7 @@ holdBtn.addEventListener('click', function(){
 
 function init(){
     gamePlaying = true;
-    firstPlayerIsPlaying = true;
+    activePlayer = 0;
     askPlayersNames();
     updateNames();
     resetScores();
@@ -57,6 +57,7 @@ function init(){
     document.querySelector('.player-0-panel').classList.remove('winner');
     document.querySelector('.player-1-panel').classList.remove('winner');
     document.querySelector('.player-0-panel').classList.add('active');
+    document.querySelector('.player-1-panel').classList.remove('active');
 }
 function askPlayersNames(){
     while(player0 == null || player0 == ''){
@@ -123,7 +124,8 @@ function updateScore(){
     resetSum();
     updateScoreField();
     //Checking if the user won the game
-    winningScore = document.querySelector(".final-score").value;
+    let input = document.querySelector(".final-score").value;
+    input !== "" ? winningScore = input : winningScore = 20;
     if(scores[activePlayer] >= winningScore){
         checkWinner();
     }
@@ -135,7 +137,6 @@ function checkWinner(){
         document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
         document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
         document.querySelector('#name-' + activePlayer).textContent = "WINNER!";
-        firstPlayerIsPlaying = false;
         gamePlaying = false;
         document.querySelector(".dice").style.display = "none";
 }
