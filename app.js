@@ -7,6 +7,12 @@ GAME RULES:
 - The player can choose to 'Hold', which means that his ROUND score gets added to his GLBAL score. After that, it's the next player's turn
 - The first player to reach 100 points on GLOBAL score wins the game
 
+--- NEW REQUIREMENTS BELOW---
+
+1. If the user gets two 6 in a row, they lose their score.
+2. Add an input field in the HTML so the users can define the winning score by themselves.
+3. Add a second dice to the game. In this scenario, the player loses his score when one of them is a one.
+
 */
 
 const rollDiceBtn = document.getElementsByClassName('btn-roll')[0];
@@ -19,6 +25,7 @@ let scores = [0,0]
 let currentSumValue = 0;
 let activePlayer = 0;
 let gamePlaying = false;
+let lastDice = 0;
 
 diceImage.style.display = "none";
 
@@ -61,25 +68,39 @@ function askPlayersNames(){
 function resetScores(){
     scores[0] = 0;
     scores[1] = 0;
-    document.querySelector('#score-0').textContent = '0';
-    document.querySelector('#score-1').textContent = '0';
+    document.querySelector('#score-0').textContent = scores[0];
+    document.querySelector('#score-1').textContent = scores[1];
+}
+function resetScore(){
+    scores[activePlayer] = 0;
+    document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
 }
 function resetSum(){
     document.querySelector('#current-' + activePlayer).textContent = '0';
     currentSumValue = 0;
 }
-function rollDice(){
-    let num = Math.floor(Math.random()  *  6) + 1 ;
-    if (num !== 1){
-        updateDice(num);
-        increaseSum(num);
-        updateSumLabel(num);
+function rollDice() {
+    console.log(lastDice);
+    let num = Math.floor(Math.random() * 6) + 1;
+    updateDice(num);
+    if (num !== 1) {
+        if (lastDice === 6 && num === 6) {
+            resetScore();
+            resetSum();
+            setTimeout(switchTurn, 1000);
+            lastDice = 0;
+        }
+        else {
+            increaseSum(num);
+            updateSumLabel(num);
+            lastDice = num;
+        }
     }
     else{
         console.log('Rolled a 1! :(');
+        setTimeout(switchTurn, 1000);
         currentSumValue = 0;
         resetSum();
-        switchTurn();
     }
 }
 
