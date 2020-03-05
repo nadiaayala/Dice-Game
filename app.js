@@ -18,7 +18,8 @@ GAME RULES:
 const rollDiceBtn = document.getElementsByClassName('btn-roll')[0];
 const holdBtn = document.getElementsByClassName('btn-hold')[0];
 const newGameBtn = document.getElementsByClassName('btn-new')[0];
-let diceImage = document.querySelector(".dice");
+let firstDice = document.querySelector("#dice-1");
+let secondDice = document.querySelector("#dice-2");
 let winningScore;
 let player0 = "";
 let player1 = "";
@@ -28,7 +29,7 @@ let activePlayer = 0;
 let gamePlaying = false;
 let lastDice = 0;
 
-diceImage.style.display = "none";
+// firstDice.style.display = "block";
 
 //Starting a new game
 newGameBtn.addEventListener('click', function(){
@@ -83,20 +84,12 @@ function resetSum(){
 }
 function rollDice() {
     console.log(lastDice);
-    let num = Math.floor(Math.random() * 6) + 1;
-    updateDice(num);
-    if (num !== 1) {
-        if (lastDice === 6 && num === 6) {
-            resetScore();
-            resetSum();
-            setTimeout(switchTurn, 500);
-            lastDice = 0;
-        }
-        else {
-            increaseSum(num);
-            updateSumLabel(num);
-            lastDice = num;
-        }
+    let num1 = Math.floor(Math.random() * 6) + 1;
+    let num2 = Math.floor(Math.random() * 6) + 1;
+    updateDices(num1, num2);
+    if (num1 !== 1 & num2 !== 1) {
+            increaseSum(num1, num2);
+            updateSumLabel(increaseSum); 
     }
     else{
         console.log('Rolled a 1! :(');
@@ -107,9 +100,11 @@ function rollDice() {
 }
 
 //Increase sum variable to keep track of it
-function increaseSum(val){
-    if (val !== 1){
-        currentSumValue += val;
+function increaseSum(val1, val2){
+    if (val1 !== 1 && val2 !== 1){
+        let sum = val1 + val2 ;
+        currentSumValue += sum ;
+        return currentSumValue;
     }
 }
 function switchTurn(){
@@ -155,9 +150,11 @@ function updateSumLabel(value){
 }
 
 //Updating the dice value
-function updateDice(val){
-    diceImage.style.display = "block";
-    diceImage.src = `dice-${val}.png`;
+function updateDices(val1, val2){
+    firstDice.style.display = "block";
+    firstDice.src = `dice-${val1}.png`;
+    secondDice.style.display = "block";
+    secondDice.src = `dice-${val2}.png`;
 }
 
 function updateScoreField(){
