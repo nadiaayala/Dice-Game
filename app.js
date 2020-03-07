@@ -30,6 +30,7 @@ let gamePlaying = false;
 let lastDice = 0;
 
 // firstDice.style.display = "block";
+hideDices();
 
 //Starting a new game
 newGameBtn.addEventListener('click', function(){
@@ -83,7 +84,6 @@ function resetSum(){
     currentSumValue = 0;
 }
 function rollDice() {
-    console.log(lastDice);
     let num1 = Math.floor(Math.random() * 6) + 1;
     let num2 = Math.floor(Math.random() * 6) + 1;
     updateDices(num1, num2);
@@ -132,8 +132,8 @@ function checkWinner(){
         document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
         document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
         document.querySelector('#name-' + activePlayer).textContent = "WINNER!";
+        hideDices();
         gamePlaying = false;
-        document.querySelector(".dice").style.display = "none";
 }
 
 //UI updating functions
@@ -142,6 +142,17 @@ function checkWinner(){
 function updateNames(){
     document.querySelector('#name-0').textContent = player0;
     document.querySelector('#name-1').textContent = player1;
+}
+
+//Hiding the dices 
+function hideDices(){
+    document.querySelector("#dice-1").style.display = "none";
+    document.querySelector("#dice-2").style.display = "none";
+}
+
+function showDices(){
+    document.querySelector("#dice-1").style.display = "block";
+    document.querySelector("#dice-2").style.display = "block";
 }
 
 //Updating the current sum value
